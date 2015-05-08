@@ -1,9 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/showdown.min.js"></script>
+<script src="./js/showdown-table.min.js"></script>
+<script src="./js/rainbow.min.js"></script>
+<script src="./js/smartAffix.js"></script>
+<script src="./js/emd.js"></script>
+<script src="../autocomplete.js"></script>
+<link rel="stylesheet" href="./css/smartAffix.css"></link>
+<link rel="stylesheet" href="./css/bootstrap.min.css"></link>
+<link rel="stylesheet" href="./css/bootstrap-theme.min.css"></link>
+<link rel="stylesheet" href="./css/rainbow.theme.github.css"></link>
+<link rel="stylesheet" href="./css/emd.css"></link>
+</head>
+<body>
 
-![](https://nodei.co/npm/jquery-autocomplete-js.png?compact=true)
+<a href="https://github.com/isis97/autocomplete-js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+<script type="emd">
 
-![](https://img.shields.io/npm/v/jquery-autocomplete-js.svg?style=flat-square)
-![](https://img.shields.io/npm/l/jquery-autocomplete-js.svg?style=flat-square)
-![](https://img.shields.io/npm/dm/jquery-autocomplete-js.svg?style=flat-square)
+
+[head]
+  title: "jquery-autocomplete-demo",
+  icon: "http://jbeckwith.com/images/2012/09/node_128.png",
+  section-animation: "fade",
+  section-animation-timing: "500"
+[!head]
+
+
+====About====
+
+
+![](nodeico/npm/jquery-autocomplete-js.png?compact=true)
+
+![](shield-flat/npm/v/jquery-autocomplete-js)
+![](shield-flat/npm/l/jquery-autocomplete-js)
+![](shield-flat/npm/dm/jquery-autocomplete-js)
 
 # [autocomplete-js](https://www.npmjs.com/package/jquery-autocomplete-js)
 The simplest jQuery plugin for creating autocomplete boxes with dynamically generated suggestions.
@@ -26,6 +59,18 @@ Just run `npm install jquery-autocomplete-js`.
 
 ## Usage
 
+[style]
+  .example:before {
+    position: relative;
+    top: 8px;
+    content: "Example";
+    margin-right: 15px;
+    font-weight: bold;
+    color: gray;
+  }
+[!style]
+
+
 Just place a `<div>` element anywhere and use the javascript:
 
 ```javascript
@@ -33,6 +78,16 @@ var ac = $('#div').autocomplete({
   options: ["apple", "bannana", "strawberry", "pineapple"]
 });
 ```
+You can see how the demos work. Try, let&#39;s type something (e.g. `apple`?)
+
+<div class="example" id="example0" style="width:300px;position:relative;left:0px;top:0px;"></div>
+[br]
+[js]
+var ac0 = $('#example0').autocomplete({
+  options: ["apple", "bannana", "strawberry", "pineapple"]
+});
+[!js]
+
 
 You can also directly access suggestions and input history:
 
@@ -40,6 +95,16 @@ You can also directly access suggestions and input history:
 ac.options = ["nope"]; //override suggestions list
 ac.historyInput = []; //clear history
 ```
+
+<div class="example" id="example1" style="width:300px;position:relative;left:0px;top:0px;"></div>
+[br]
+[js]
+var ac1 = $('#example1').autocomplete({
+  options: ["apple", "bannana", "strawberry", "pineapple"]
+});
+ac1.options = ["nope"];
+[!js]
+
 
 Note that the `options` field can be a function (options provider):
 
@@ -64,6 +129,18 @@ var ac = $('#div').autocomplete({
 });
 ```
 
+<div class="example" id="example2" style="width:300px;position:relative;left:0px;top:0px;"></div>
+[br]
+[js]
+$('#example2').autocomplete({
+  options: ["apple", "amd", "august", "amerald", "America", "amused", "a", "appendix", "application", "app"],
+  showDropDown: true,
+  dropDownPosition: 'bottom',
+  backgroundColor: 'white'
+});
+[!js]
+
+
 And with fancy little description box:
 
 ```javascript
@@ -79,7 +156,7 @@ ac.options = [
 
 To display the suggestions descriptions you have to enable the suggestions dropdown list by
 setting the `showDropDown` constructor field to `true`. You can also set its position (top or bottom).
-And modify some of its display properties.
+And modify some of its display properties - [see API docs](jump-to:API docs).
 
 ```javascript
 var ac = $('#div').autocomplete({
@@ -96,6 +173,24 @@ var ac = $('#div').autocomplete({
   backgroundColor: 'white'
 });
 ```
+
+<div class="example" id="example3" style="width:300px;position:relative;left:0px;top:0px;"></div>
+[br]
+[js]
+$('#example3').autocomplete({
+  options: [
+    {
+      name: "apple",
+      description: "a <b>fruit</b>",
+      html: true
+    },
+    "amd", "august", "amerald", "America", "amused", "a", "appendix", "application", "app"
+  ],
+  showDropDown: true,
+  dropDownPosition: 'bottom',
+  backgroundColor: 'white'
+});
+[!js]
 
 You can also enable history and add some event handlers:
 
@@ -124,6 +219,34 @@ var ac = $('#div').autocomplete({
 });
 ```
 
+<div id="example4_wrapper"><div class="example" id="example4" style="width:300px;position:relative;left:0px;top:0px;"></div><div id="example4_out" style="position:relative;left:400px;top:-12px;border-style:solid;border-width:1px;width:50%;">No events.</div></div>
+
+[br]
+[js]
+$('#example4').autocomplete({
+  options: [
+    {
+      name: "apple",
+      description: "a <b>fruit</b>",
+      html: true
+    },
+    "amd", "august", "amerald", "America", "amused", "a", "appendix", "application", "app"
+  ],
+  showDropDown: true,
+  dropDownPosition: 'bottom',
+  backgroundColor: 'white',
+  onConfirmed: function(obj, text) {
+    alert(obj.pullText());
+  },
+  onChanged: function(obj, text) {
+    $('#example4_out').html('<span>Input has changed. ('+text+')</span><br>');
+  },
+  onHistoryBrowsed: function(obj, hist) {
+    $('#example4_out').html('<span>History called ('+hist.join(',')+')</span><br>');
+  }
+});
+[!js]
+
 ## Simple methods
 
 Just a little amount of the useful methods:
@@ -147,6 +270,12 @@ Just a little amount of the useful methods:
 
 All functions except these returning strings or any other special values returns the instance of the autocomplete provider, so they can be chained easily.
 
+[footer]
+- isis97 Styczynsky Digital Systems
+[!footer]
+
+====API docs====
+
 ## Constructor properties
 
 The autocomplete instance is created with:
@@ -160,10 +289,10 @@ Here is a list of all available initial properties:
 
 | property                         | type                                                  | default value   | meaning                                                                     |
 |----------------------------------|-------------------------------------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `onKey`                          | Handler - `function(jQuery.Event)`       | empty function  | Key input handler. It should be the function accepting one parameter - jQuery event object. The function will be called each time the user will press any non-special key (not arrows and enter) - can be used with `isDisabled` option to disable autocompletion at startup and then call `enable()` to enable the autocompletion on the specified key combination. |
-| `onConfirmed`                    | Handler - `function(autocompleteInstance, String)`    | empty function  | Input confirmation handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user hits enter. |
-| `onChanged`                      | Handler - `function(autocompleteInstance, String)`    | empty function  | Input change handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user changes anything with the input (key press, text change etc.). |
-| `onHistoryBrowsed`               | Handler - `function(autocompleteInstance, String[])`  | empty function  | History browsing handler. It should be the function accepting two parameters - autocomplete object instance and the array containing the input history. The function will be called each time the user uses the history browsing. |
+| `onKey`                          | Handler - `function(jQuery.Event)`{.javascript}       | empty function  | Key input handler. It should be the function accepting one parameter - jQuery event object. The function will be called each time the user will press any non-special key (not arrows and enter) - can be used with `isDisabled` option to disable autocompletion at startup and then call `enable()` to enable the autocompletion on the specified key combination. |
+| `onConfirmed`                    | Handler - `function(autocompleteInstance, String)`{.javascript}    | empty function  | Input confirmation handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user hits enter. |
+| `onChanged`                      | Handler - `function(autocompleteInstance, String)`{.javascript}    | empty function  | Input change handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user changes anything with the input (key press, text change etc.). |
+| `onHistoryBrowsed`               | Handler - `function(autocompleteInstance, String[])`{.javascript}  | empty function  | History browsing handler. It should be the function accepting two parameters - autocomplete object instance and the array containing the input history. The function will be called each time the user uses the history browsing. |
 | `isDisabled`                     | Bool                                                  | false           | Disables autocompletion function when at initialization (can be used with `onKey` to enable autocompletion only when specified key combination was made) |
 | `showDropDown`                   | Bool                                                  | false           | Enables the dropdown suggestion list                                        |
 | `dropDownPosition`               | String                                                | 'bottom'        | Sets the dropdown position (top/bottom).                                    |
@@ -211,3 +340,13 @@ Here is the list of all useful autocomplete methods and fields:
 | `formWrapper`           | JQuery object | The wrapper component.                                                         |
 | `historyBrowsingActive` | Bool          | The bool value indicating if the user currently is browsing the input history. |
 | `historyIndex`          | Integer       | The currently browsed history index.                                           |
+
+[footer]
+- isis97 Styczynsky Digital Systems
+[!footer]
+
+</script>
+<script type="text/javascript">$.emd.init();</script>
+
+</body>
+</html>
