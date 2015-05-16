@@ -59,3 +59,21 @@ object[type=emd] {
 footer {
   font-size: small;
 }
+
+.code-preview-menu-option {
+  cursor: pointer;
+}
+.code-preview-menu-option:hover {
+  background-color: gray;
+}
+.code-preview-menu {
+  margin-bottom: -20px !important;
+}
+.code-preview-menu .navbar-nav > li > a, .navbar-brand {
+    padding-top:4px !important;
+    padding-bottom:0 !important;
+    height: 28px;
+}
+.code-preview-menu .navbar {
+  min-height:28px !important;
+}

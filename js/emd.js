@@ -24,7 +24,7 @@
                 '<span class="sr-only">Toggle navigation</span>' +
                 '<span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>' +
               '</button>' +
-              '<a class="navbar-brand" id="page-title-header">' +
+              '<a class="navbar-brand" id="page-title-header" style="margin-right:100px;">' +
               '</a>' +
             '</div>' +
             '<nav id="bs-example-navbar-collapse-1" class="collapse navbar-collapse bs-navbar-collapse">' +
@@ -80,6 +80,7 @@
     var __onRefresh__ = (function(){
       $(document).scrollTop($(document).scrollTop()+1);
       $(document).scrollTop($(document).scrollTop()-1);
+      prettyPrint();
       $('*[href]').each(function(){
         var thiz = $(this);
         if(thiz.attr('href').indexOf('jump-to:') != -1) {
@@ -94,7 +95,30 @@
         thiz.click(function(){
           jumpToSection(linkageTgt);
         });
-      })
+      });
+      $('ul.menu-content.md_rendered').each(function(){
+        var parent = $(this);
+        var children = parent.children();
+        var codePreview = parent.parent().parent().parent().parent();
+        var pre = codePreview.find('pre');
+        var codeColoured = codePreview.find('.code-preview-coloured-provider').find('code');
+        var mark = function(e) {
+          children.removeClass('active');
+          $(e).addClass('active');
+        };
+        children.each(function(){
+          var thiz = $(this);
+          thiz.click(function(){
+            mark(this);
+            var action = thiz.data('option-action');
+            if(action == 'raw') {
+              pre.text(codeColoured.text());
+            } else {
+              pre.html(codeColoured.html());
+            }
+          });
+        });
+      });
     });
     var __onAnimateNewContentTimming__ = 500;
     var __onAnimateNewContent__ = (function(newContent){
@@ -271,14 +295,40 @@
         }
 
       });
-      $('table.md_rendered').addClass('table table-striped table-hover table-condensed');
+      $('table.md_rendered').addClass('table table-striped table-hover table-condensed table-responsive');
       $('code.md_rendered').each(function(){
           var thiz = $(this);
           thiz.removeClass('md_rendered');
-          thiz.attr('data-language', thiz.attr('class'));
+          if(thiz.attr('class')) thiz.attr('data-language', thiz.attr('class'));
+          //thiz.attr('class', '');
+          thiz.addClass('prettyprint');
           thiz.addClass('md_rendered');
       });
-      Rainbow.color(function(){
+
+      var call_f = (function(){
+        $('code.md_rendered[data-language]').each(function(){
+          var thiz = $(this);
+          var codeSegment = thiz.parent();
+          codeSegment.wrap('<div class="code-preview md_rendered"></div>');
+          codeSegment = codeSegment.parent();
+
+          var codePreviewCopy = $('<span class="code-preview-coloured-provider md_rendered" style="display:none;"></span>')
+          codePreviewCopy.append(codeSegment.clone());
+
+          codePreviewMenu = $('<div class="code-preview-menu md_rendered"><nav class="navbar navbar-default navbar-static-top"><div class="container"><ul class="menu-content md_rendered nav navbar-nav"></ul></div></nav></div>');
+          var codePreviewMenuC = codePreviewMenu.find('.menu-content');
+
+          var codePreviewOption_viewCode = $('<li data-option-action="code" class="code-preview-menu-option md_rendered active"><a>Code</a></li>');
+          var codePreviewOption_viewRaw = $('<li data-option-action="raw" class="code-preview-menu-option md_rendered"><a>View raw</a></li>');
+
+          codePreviewMenuC
+            .append(codePreviewOption_viewCode)
+            .append(codePreviewOption_viewRaw);
+
+          codeSegment.append(codePreviewCopy);
+          codeSegment.prepend(codePreviewMenu);
+        });
+
         emdReady = true;
         $('section.md-section').each(function(){
           sections.push($(this));
@@ -297,15 +347,15 @@
         }
         $('span.md-box').each(function(){
           var thiz = $(this);
-
-
         });
-
         jumpToSection(sections[0].data('name'));
 
         emdReady = true;
         __onRefresh__();
       });
+      call_f();
+      prettyPrint();
+      //window.callback = call_f;
 
     });
 
