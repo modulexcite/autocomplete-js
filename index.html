@@ -571,6 +571,27 @@ The scrollController has to implement three methods:
 
 The default scroll controller looks like this:
 
+```javascript
+$('#div').autocompelte({
+  scrollController: {
+    init: function(e) {
+      //The e parameter is jQuery dropdown list DOM element
+      return e; //Returns the container for the list objects
+    },
+    repaint: function(e) {
+      //Does the recalculation of the scrollbar size
+      //It's not needed when dealing with the native scrollbar.
+    },
+    scroll: function(value) {
+      //Scroll by the specified value if provided
+      if(value) dropDown.scrollTop(value); //using jQuery
+
+      //Return the current scroll value:
+      return dropDown.scrollTop();
+    }
+  }
+});
+```
 
 You can implement your own scrollbar handler or use the [nanoscroller.js](https://github.com/jamesflorentino/nanoScrollerJS) by
 setting the `scrollController` field to `"nanoscroller"`:
@@ -639,6 +660,15 @@ Let&#39;s use some CSS styling:
           box-shadow: 0 10px 6px -6px #777;
 }
 ```
+
+The default autocomplete object classes are:
+
+* `autocomplete-text` for the hint and input field (used for styling the input box)
+* `autocomplete-dropdown` - the dropdown list component
+* `autocomplete-wrapper` - the wrapper for all elements
+* `autocomplete-dropdown-description-box` - the dropdown description box compoent
+* `autocomplete-input` - the input field (for styling purpose use the `autocomplete-text`)
+* `autocomplete-hint` - the input field hint (for styling purpose use the `autocomplete-text`)
 
 The final result is:
 
