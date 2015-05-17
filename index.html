@@ -3,6 +3,7 @@
 <head>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
+<script src="./js/bootstrap-switch.min.js"></script>
 <script src="./js/showdown.min.js"></script>
 <script src="./js/showdown-table.min.js"></script>
 <script src="./js/prettify.js"></script>
@@ -12,6 +13,7 @@
 <link rel="stylesheet" href="./css/smartAffix.css"></link>
 <link rel="stylesheet" href="./css/bootstrap.min.css"></link>
 <link rel="stylesheet" href="./css/bootstrap-theme.min.css"></link>
+<link rel="stylesheet" href="./css/bootstrap-switch.min.css"></link>
 <link rel="stylesheet" href="./css/prettify.css"></link>
 <link rel="stylesheet" href="./css/emd.css"></link>
 <script src="./js/random-words.js"></script>
@@ -47,7 +49,8 @@
 # [autocomplete-js](https://www.npmjs.com/package/jquery-autocomplete-js)
 The simplest jQuery plugin for creating autocomplete boxes with dynamically generated suggestions.
 
-<div class="example" id="example_leading" style="width:300px;position:relative;left:0px;top:0px;"></div>
+<div class="example" id="example_leading" style="width:300px;position:relative;left:0px;top:0px;">
+</div>
 
 [br]
 [js]
@@ -146,6 +149,11 @@ Just run `npm install jquery-autocomplete-js`.
   }
   .divlineL {
     border-left-width: 5px;
+  }
+  .border-grad {
+    border-width: 0 3px 0;
+    border-right-width: 0;
+    border-color: #626262;
   }
 [!style]
 
@@ -301,15 +309,67 @@ var ac = $('#div').autocomplete({
   dropDownPosition: 'bottom',
   backgroundColor: 'white'
 }).confirmed(function(obj, text) {
-  alert(obj.pullText());
+  $('#out').prepend('Confirmed ('+text+')');
 }).changed(function(obj, text) {
-  $('#output').html('<span>Input has changed. ('+text+')</span><br>');
+  $('#out').prepend('Input has changed. ('+text+')');
 }).historyBrowsed(function(obj, hist) {
-  $('#output').html('<span>History called ('+hist.join(',')+')</span><br>');
+  $('#out').prepend('History called ('+hist.join(',')+')');
+}).key(function(e, code) {
+  $('#out').prepend('Key pressed ('+code+')');
+}).dropdownShown(function() {
+  $('#out').prepend('Dropdown shown');
+}).dropdownHidden(function() {
+  $('#out').prepend('Dropdown hidden');
+}).hintChanged(function(obj, text) {
+  $('#out').prepend('Hint changed ('+text+')');
 });
 ```
 
-<div id="example4_wrapper"><div class="example" id="example4" style="width:300px;position:relative;left:0px;top:0px;"></div><div id="example4_out" style="position:relative;left:400px;top:-12px;border-style:solid;border-width:1px;width:50%;">No events.</div></div>
+Test everything by typing something in the input box and enabling the specified handlers:
+[br][br][br][br]
+
+<div class="border-grad" style="border-right-style:none;">
+  <table>
+    <tr>
+      <td>Enable 'confirmed' event handler:</li>
+      <td><input type="checkbox" name="example4_cb_0" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success" checked></li>
+    </tr>
+    <tr>
+      <td>Enable 'changed' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_1" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success" checked></td>
+    </tr>
+    <tr>
+      <td>Enable 'historyBrowsed' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_2" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success" checked></td>
+    </tr>
+    <tr>
+      <td>Enable 'key' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_3" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success"></td>
+    </tr>
+    <tr>
+      <td>Enable 'dropdownShown' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_4" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success" checked></td>
+    </tr>
+    <tr>
+      <td>Enable 'dropdownHidden' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_5" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success" checked></td>
+    </tr>
+    <tr>
+      <td>Enable 'hintChanged' event handler:</td>
+      <td><input type="checkbox" name="example4_cb_6" data-on-text="Yes" data-off-text="No" data-off-color="danger" data-on-color="success"></td>
+    </tr>
+  </table>
+</div>
+
+<div id="example4_wrapper">
+<div class="example" id="example4" style="width:300px;position:relative;left:0px;top:0px;"></div>
+<div id="example4_out" style="position:relative;left:450px;border-radius: 5px;-moz-border-radius: 5px;top:-12px;border-style:groove;border-width:3px;width:50%;min-height:40px;">
+  <button id="example4_btn_clear_log" style="position:absolute;right:10px;border-radius: 5px;-moz-border-radius: 5px;">
+    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Clear
+  </button>
+  <ul id="example4_out_c"></ul>
+</div>
+</div>
 
 [br]
 [js]
@@ -328,18 +388,53 @@ $('#example4').autocomplete({
   dropDownPosition: 'bottom',
   backgroundColor: 'white'
 }).confirmed(function(obj, text) {
-  alert(obj.pullText());
+  if(!$("[name='example4_cb_0']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Confirmed ('+text+')</li>');
 }).changed(function(obj, text) {
-  $('#example4_out').html('<span>Input has changed. ('+text+')</span><br>');
+  if(!$("[name='example4_cb_1']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Input has changed. ('+text+')</li>');
 }).historyBrowsed(function(obj, hist) {
-  $('#example4_out').html('<span>History called ('+hist.join(',')+')</span><br>');
+  if(!$("[name='example4_cb_2']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">History called ('+hist.join(',')+')</li>');
+}).key(function(e, code) {
+  if(!$("[name='example4_cb_3']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Key pressed ('+code+')</li>');
+}).dropdownShown(function() {
+  if(!$("[name='example4_cb_4']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Dropdown shown</li>');
+}).dropdownHidden(function() {
+  if(!$("[name='example4_cb_5']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Dropdown hidden</li>');
+}).hintChanged(function(obj, text) {
+  if(!$("[name='example4_cb_6']").bootstrapSwitch('state')) return;
+  if($('#example4_out_c').children().length>5) $('#example4_out_c').children().last().remove();
+  $('#example4_out_c').prepend('<li style="line-height:90%;margin-left:0px;">Hint changed ('+text+')</li>');
 });
+
+$("[name='example4_cb_0']").bootstrapSwitch();
+$("[name='example4_cb_1']").bootstrapSwitch();
+$("[name='example4_cb_2']").bootstrapSwitch();
+$("[name='example4_cb_3']").bootstrapSwitch();
+$("[name='example4_cb_4']").bootstrapSwitch();
+$("[name='example4_cb_5']").bootstrapSwitch();
+$("[name='example4_cb_6']").bootstrapSwitch();
+
+$('#example4_btn_clear_log').click(function(){
+  $('#example4_out_c').html('');
+});
+
 [!js]
 
 
 ## Customization
 
-If you want ti customize e.g. the ugly scrollbar from the suggestions list you can use [nanoscroller.js](https://github.com/jamesflorentino/nanoScrollerJS):
+If you want to customize the ugly scrollbar from the suggestions list you can use for example the [nanoscroller.js](https://github.com/jamesflorentino/nanoScrollerJS):
 Just add to your page header:
 
 * `nanoscroller.min.js`
@@ -405,9 +500,7 @@ All functions except these returning strings or any other special values returns
 
 [js]
 $(function(){
-
   $('h2').addClass('divline divlineM').css('border-left-color', '#5bc0de');
-
   $('.example').before('<span class="example-cursor glyphicon glyphicon-menu-right" aria-hidden="true" style="float:left;padding-top:10px;padding-right:10px;"></span>');
   var timeout = 1000;
   $('.example-cursor').each(function(){
@@ -496,7 +589,7 @@ $('#example_leading').autocomplete({
 
 ## Add own animations!
 
-It&#39;s deadly simple customization, because you can use the `aniamtion` field like this:
+It&#39;s deadly simple customization, because you can use the `animation` field like this:
 
 ```javascript
 
@@ -710,6 +803,30 @@ $('#example_leading_customization').autocomplete({
 [!js]
 [br][br]
 
+[js]
+$(function(){
+  $('h2').addClass('divline divlineM').css('border-left-color', '#5bc0de');
+  $('.example').before('<span class="example-cursor glyphicon glyphicon-menu-right" aria-hidden="true" style="float:left;padding-top:10px;padding-right:10px;"></span>');
+  var timeout = 1000;
+  $('.example-cursor').each(function(){
+    var thiz = $(this);
+    var f = (function(){
+      thiz.animate({
+        left: 8
+      }, timeout, function(){
+        thiz.animate({
+          left: 0
+        }, timeout, function(){
+          setTimeout(function(){f();}, timeout);
+        });
+      });
+    });
+    f();
+  });
+});
+[!js]
+
+
 [footer]
 - isis97 Styczynsky Digital Systems
 [!footer]
@@ -732,7 +849,7 @@ Here is a list of all available initial properties:
 |----------------------------------|-------------------------------------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `animation`                      | Array of Arrays                                       | []              | Sets the custom dropdown animations. Please do NOT use it if you implemented custom animations using event handlers. ([see customization page](jump-to:Customization)) |
 | `scrollController`               | Object                                                | native controller | Sets the scrollbar controller - used to implement custom scrollbars on the dropdown ([see customization page](jump-to:Customization)) |
-| `isDisabled`                     | Bool                                                  | false           | Disables autocompletion function when at initialization (can be used with `onKey` to enable autocompletion only when specified key combination was made) |
+| `isDisabled`                     | Bool                                                  | false           | Disables autocompletion function when at initialization (can be used with `key` event handler to enable autocompletion only when specified key combination was made) |
 | `showDropDown`                   | Bool                                                  | false           | Enables the dropdown suggestion list                                        |
 | `dropDownPosition`               | String                                                | 'bottom'        | Sets the dropdown position (top/bottom).                                    |
 | `inputWidth`                     | String                                                | 100%            | CSS width of the input box                                                  |
@@ -777,13 +894,13 @@ ac.key(function(event){
 
 | Listener register              | Handler parameters                 | Event description |
 |--------------------------------|------------------------------------|-------------------|
-| `key`                          | `(jQuery.Event)`                   | Key input handler. It should be the function accepting one parameter - jQuery event object. The function will be called each time the user will press any non-special key (not arrows and enter) - can be used with `isDisabled` option to disable autocompletion at startup and then call `enable()` to enable the autocompletion on the specified key combination. |
+| `key`                          | `(jQuery.Event, int keyCode)`      | Key input handler. It should be the function accepting two parameters - jQuery event object and the ASCII code of the pressed character. The function will be called each time the user will press any non-special key (not arrows and enter) - can be used with `isDisabled` option to disable autocompletion at startup and then call `enable()` to enable the autocompletion on the specified key combination. |
 | `confirmed`                    | `(autocompleteInstance, String)`   | Input confirmation handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user hits enter. |
 | `changed`                      | `(autocompleteInstance, String)`   | Input change handler. It should be the function accepting two parameters - autocomplete object instance and the captured value of the field. The function will be called each time the user changes anything with the input (key press, text change etc.). |
 | `historyBrowsed`               | `(autocompleteInstance, String[])` | History browsing handler. It should be the function accepting two parameters - autocomplete object instance and the array containing the input history. The function will be called each time the user uses the history browsing. |
 | `dropdownShown`                | `(dropDownInstance)`               | Dropdown show event is triggered when the drop down is shown (you can use it to enable dropdown animations - [see customization page](jump-to:Customization)) |
 | `dropdownHidden`               | `(dropDownInstance)`               | Dropdown hide event is triggered when the drop down is hidden (you can use it to enable dropdown animations - [see customization page](jump-to:Customization)) |
-
+| `hintChanged`                  | `(autocompleteInstance, String)`   | Hint changed event is triggered when user changes his input, so the dynamic suggestion is also changed. The handler accepts instance of the autocomplete and hint text as parameters. |
 
 ## The autocomplete fields
 
@@ -801,6 +918,29 @@ Here is the list of all useful autocomplete methods and fields:
 | `formWrapper`           | JQuery object | The wrapper component.                                                         |
 | `historyBrowsingActive` | Bool          | The bool value indicating if the user currently is browsing the input history. |
 | `historyIndex`          | Integer       | The currently browsed history index.                                           |
+
+[js]
+$(function(){
+  $('h2').addClass('divline divlineM').css('border-left-color', '#5bc0de');
+  $('.example').before('<span class="example-cursor glyphicon glyphicon-menu-right" aria-hidden="true" style="float:left;padding-top:10px;padding-right:10px;"></span>');
+  var timeout = 1000;
+  $('.example-cursor').each(function(){
+    var thiz = $(this);
+    var f = (function(){
+      thiz.animate({
+        left: 8
+      }, timeout, function(){
+        thiz.animate({
+          left: 0
+        }, timeout, function(){
+          setTimeout(function(){f();}, timeout);
+        });
+      });
+    });
+    f();
+  });
+});
+[!js]
 
 [footer]
 - isis97 Styczynsky Digital Systems
